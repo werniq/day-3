@@ -58,7 +58,7 @@ func getEnvVariable(key string) string {
 }
 
 func getAlbum(w http.ResponseWriter, r *http.Request) {
-	var album []*Albums
+	var album []*Album
 	// mux.Vars -> to read album id
 	id := mux.Vars(r)["id"]
 	db.First(&album, id)
@@ -120,5 +120,5 @@ func main() {
 	r.HandleFunc("api/v1/albums", getAlbum).Methods("GET")
 	r.HandleFunc("api/v1/albums/{id}", updateAlbum).Methods("PUT")
 	r.HandleFunc("api/v1/albums/{id}", deleteAlbum).Methods("DELETE")
-	r.HandleFunc("api/v1/albums/{id}", get)
+	r.HandleFunc("api/v1/albums/{id}", getAlbums).Methods("GET")
 }
