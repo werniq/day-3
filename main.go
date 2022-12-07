@@ -2,14 +2,26 @@ package blog
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
-	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"net/http"
-	"os"
 	"strconv"
 )
+
+// For db
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "postgres"
+	password = "Matwyenko1_"
+	dbname   = "postgres"
+)
+
+dsn := fmt.Sprint("host=%s port=%s name=%s user=%s password=%s", host, port, dbname, user, password)
+db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+defer db.Close()
 
 var (
 	postId = 0
@@ -23,6 +35,7 @@ var (
 	}
 )
 
+// Posts
 type Post struct {
 	id       int         `json:"id"`
 	text     string      `json:"text"`
@@ -33,12 +46,14 @@ type Post struct {
 	category []*Category `json:"categories"`
 }
 
+// Comment to posts
 type Comment struct {
 	author *User  `json:"user"`
 	likes  int    `json:"likes"`
 	text   string `json:"text"`
 }
 
+// For authorization
 type User struct {
 	id            int    `json:"int"`
 	username      string `json:"username"`
@@ -47,15 +62,17 @@ type User struct {
 	totalComments int    `json:"totalComments"`
 }
 
+// Category for posts
 type Category struct {
-	business       string `json:"category1"`
-	travel         string `json:"category2"`
-	cryptocurrency string `json:"category3"`
-	cooking        string `json:"category4"`
-	books          string `json:"category5"`
-	art            string `json:"category6"`
+	business       string `json:"category-business"`
+	travel         string `json:"category-travel"`
+	cryptocurrency string `json:"category-cryptocurrency"`
+	cooking        string `json:"category-cooking"`
+	books          string `json:"category-books"`
+	art            string `json:"category-art"`
 }
 
+// Create Post function
 func createPost(w http.ResponseWriter, r *http.Request) {
 	var post *Post
 	json.NewDecoder(r.Body).Decode(&post)
@@ -66,6 +83,7 @@ func createPost(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(posts)
 }
 
+// Get Post by id
 func getPost(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id := params["id"]
@@ -77,14 +95,7 @@ func getPost(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getDotEnvVar(key string) string {
-	err := godotenv.Load(key)
-	if err != nil {
-		panic(err)
-	}
-	return os.Getenv(key)
-}
-
+// Update post
 func modifyPost(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id := params["id"]
@@ -100,6 +111,7 @@ func modifyPost(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Delete post from db
 func deletePost(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id := params["id"]
@@ -112,15 +124,14 @@ func deletePost(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Get all posts(home page)
 func getAllPosts(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(posts)
 }
 
 func main() {
-	dsn := "host=localhost user=postgres password=Matwyenko1_ dbname=postgres port=5432 sslmode=disable"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	db.DB()
+
 	if err != nil {
 		panic(err)
 	}
@@ -132,4 +143,9 @@ func main() {
 	r.HandleFunc("/post/{id}", getPost).Methods("GET")
 	r.HandleFunc("/post/{id}", deletePost).Methods("DELETE")
 	r.HandleFunc("post/{id}", modifyPost).Methods("PUT")
+}
+
+
+func register(w http.ResponseWriter, r *http.Request) {
+
 }
