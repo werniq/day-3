@@ -1,10 +1,13 @@
-package register
+package main
 
 import (
+	"blog"
 	"fmt"
+	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	"gorm.io/driver/postgres"
 	"html/template"
+	"net/http"
 )
 
 // For db
@@ -32,6 +35,57 @@ func main() {
 
 	// Closes database
 	defer db.Close()
+	r := mux.NewRouter()
+
+	r.HandleFunc("/register", registerHandler).Methods("POST")
+	r.HandleFunc("/registerauth", registerAuthHandler)
+	r.HandleFunc("/registererror", registerError).Methods("GET")
 
 	fmt.Println("Database connected - #Register")
+}
+
+func registerHandler(w http.ResponseWriter, r *http.Request) {
+	// Post request -> username & password
+	var username string
+	var userPass string
+	var user *blog.User
+	if user == nil {
+		fmt.Println("hahahah")
+	}
+	if !(r.Method == "POST" && r.URL.Path == "/register") {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+	r.ParseForm()
+	username = r.FormValue("username")
+	userPass = r.FormValue("password")
+	if username != "" {
+		if len(username) < 10 {
+			user.Username = username
+		} else {
+			fmt.Println("<h1>Length of username must be more than 10!</h1>")
+		}
+		if userPassword == "" {
+
+		} else {
+			http.Redirect(w, r, "/registererror", 0)
+		}
+	} else {
+		http.Redirect(w, r, "/registererror", 0)
+	}
+	//res := db.Create(&user)
+}
+
+func registerAuthHandler(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func registerError(w http.ResponseWriter, r *http.Request) {
+	templ, err := template.ParseGlob("./template/no-data.gohtml")
+
+	if err == nil {
+		panic(err)
+	}
+
+	templ.Execute(w, nil)
 }

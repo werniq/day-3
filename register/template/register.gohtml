@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Registration Form</title>
+    </head>
+    <body>
+    <h1>Registration rules</h1>
+            <ul>
+                <li>Password must contain at least
+                    1 uppercase letter, symbol, and digit</li>
+                <li>Username must contain than 10 symbols</li>
+                <li>Password must contain more than 9 symbols</li>
+                <li>Username must contain only digits and letters</li>
+            </ul>
+    <form action="/registerauth" method="POST">
+            <lavel for="username">Username:</lavel><br>
+            <input type="text" id="username" name="username"><br>
+            <label for="password">Password</label><br>
+            <input type="password" id="password" name="password"><br>
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+</html>

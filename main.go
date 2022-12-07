@@ -55,9 +55,9 @@ type Comment struct {
 
 // For authorization
 type User struct {
-	id            int    `json:"int"`
-	username      string `json:"username"`
-	password      string `json:"password"`
+	id       int    `json:"int"`
+	Username string `json:"username"`
+	password string `json:"password"`
 	totalLikes    int    `json:"totalLikes"`
 	totalComments int    `json:"totalComments"`
 }
@@ -137,15 +137,14 @@ func main() {
 	}
 
 	r := mux.NewRouter()
+	fmt.Println("Starting server...")
+
 	r.HandleFunc("/", getAllPosts).Methods("GET")
 	r.HandleFunc("/post", createPost).Methods("POST")
 
 	r.HandleFunc("/post/{id}", getPost).Methods("GET")
 	r.HandleFunc("/post/{id}", deletePost).Methods("DELETE")
 	r.HandleFunc("post/{id}", modifyPost).Methods("PUT")
-}
 
-
-func register(w http.ResponseWriter, r *http.Request) {
-
+	fmt.Println(http.ListenAndServe(":8080", nil))
 }
