@@ -37,7 +37,7 @@ type Token struct {
 }
 
 func getDatabase() *gorm.DB {
-	dsn := fmt.Sprint("host=%s port=%s name=%s user=%s password=%s", host, port, dbname, user, password)
+	var dsn string = fmt.Sprint("host=%s port=%s name=%s user=%s password=%s", host, port, dbname, user, password)
 	db, err := gorm.Open(postgres.Open(dsn), *gorm.Config{})
 
 	if err != nil {
