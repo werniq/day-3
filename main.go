@@ -4,8 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/jinzhu/gorm"
 	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+
+	//"github.com/jinzhu/gorm"
+	//"gorm.io/driver/postgres"
 	"net/http"
 	"strconv"
 )
@@ -18,10 +21,6 @@ const (
 	password = "Matwyenko1_"
 	dbname   = "postgres"
 )
-
-dsn := fmt.Sprint("host=%s port=%s name=%s user=%s password=%s", host, port, dbname, user, password)
-db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-defer db.Close()
 
 var (
 	postId = 0
@@ -55,10 +54,10 @@ type Comment struct {
 
 // For authorization
 type User struct {
-	id       	  int    `json:"int"`
+	id            int    `json:"int"`
 	Username      string `json:"username"`
-	email 	 	  string `json:email`
-	password 	  string `json:"password"`
+	email         string `json:email`
+	password      string `json:"password"`
 	totalLikes    int    `json:"totalLikes"`
 	totalComments int    `json:"totalComments"`
 }
@@ -132,10 +131,12 @@ func getAllPosts(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-
+	dsn := fmt.Sprint("host=%s port=%s name=%s user=%s password=%s", host, port, dbname, user, password)
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
+	defer db.Close()
 
 	r := mux.NewRouter()
 	fmt.Println("Starting server...")
@@ -152,3 +153,6 @@ func main() {
 
 	fmt.Println(http.ListenAndServe(":8080", nil))
 }
+
+func SignUp(w http.ResponseWriter, r *http.Request) {}
+func SignIn(w http.ResponseWriter, r *http.Request) {}
