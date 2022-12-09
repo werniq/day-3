@@ -55,10 +55,10 @@ type Comment struct {
 
 // For authorization
 type User struct {
-	id       int    `json:"int"`
-	Username string `json:"username"`
-	email 	 string `json:email`
-	password string `json:"password"`
+	id       	  int    `json:"int"`
+	Username      string `json:"username"`
+	email 	 	  string `json:email`
+	password 	  string `json:"password"`
 	totalLikes    int    `json:"totalLikes"`
 	totalComments int    `json:"totalComments"`
 }
