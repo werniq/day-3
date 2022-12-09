@@ -57,6 +57,7 @@ type Comment struct {
 type User struct {
 	id       int    `json:"int"`
 	Username string `json:"username"`
+	email 	 string `json:email`
 	password string `json:"password"`
 	totalLikes    int    `json:"totalLikes"`
 	totalComments int    `json:"totalComments"`
@@ -145,6 +146,9 @@ func main() {
 	r.HandleFunc("/post/{id}", getPost).Methods("GET")
 	r.HandleFunc("/post/{id}", deletePost).Methods("DELETE")
 	r.HandleFunc("post/{id}", modifyPost).Methods("PUT")
+
+	r.HandleFunc("/signup", SignUp).Methods("POST")
+	r.HandleFunc("/signin", SignIn).Methods("POST")
 
 	fmt.Println(http.ListenAndServe(":8080", nil))
 }
